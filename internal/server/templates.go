@@ -8,7 +8,7 @@ import (
 func (s *Server) LoadTemplates() error {
 	views := make(map[string]*template.Template)
 
-	pages, err := filepath.Glob("web/pages/*.html")
+	pages, err := filepath.Glob("frontend/pages/*.html")
 
 	if err != nil {
 		return err
@@ -21,7 +21,7 @@ func (s *Server) LoadTemplates() error {
 	for _, page := range pages {
 		name := filepath.Base(page)
 
-		ts, err := template.New(name).Funcs(functions).ParseFiles("web/layout/base.html")
+		ts, err := template.New(name).Funcs(functions).ParseFiles("frontend/layout/base.html")
 		if err != nil {
 			return err
 		}

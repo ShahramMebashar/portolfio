@@ -18,11 +18,11 @@ export default defineConfig({
   },
   build: {
     manifest: true,
-    dir: "./web",
+    dir: "./frontend",
     outDir: "./public",
     rollupOptions: {
       input: {
-        main: "./web/js/main.js",
+        main: "./frontend/js/main.js",
       },
       output: {
         entryFileNames: "js/[name].[hash].js",
