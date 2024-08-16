@@ -8,31 +8,32 @@ import (
 func (s *Server) LoadTemplates() error {
 	views := make(map[string]*template.Template)
 
-	layouts, err := filepath.Glob("web/layout/*.html")
-
-	if err != nil {
-		return err
-	}
-
 	pages, err := filepath.Glob("web/pages/*.html")
 
 	if err != nil {
 		return err
 	}
 
+	functions := template.FuncMap{
+		"asset": s.LoadAsset,
+	}
+
 	for _, page := range pages {
-		files := append(layouts, page)
 		name := filepath.Base(page)
 
-		t, err := template.ParseFiles(files...)
-
+		ts, err := template.New(name).Funcs(functions).ParseFiles("web/layout/base.html")
 		if err != nil {
 			return err
 		}
 
-		// name are like home.html
-		// we want to remove the .html part
+		t, err := ts.ParseFiles(page)
+		if err != nil {
+			return err
+		}
+
+		// remove .html from the name
 		name = name[:len(name)-5]
+
 		views[name] = t
 	}
 

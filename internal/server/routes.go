@@ -1,6 +1,8 @@
 package server
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func (s *Server) RegisterRoutes() http.Handler {
 	// Register the routes
@@ -11,7 +13,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
 		tmpl, ok := s.views["home"]
 
 		if !ok {
@@ -19,7 +20,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 			return
 		}
 
-		err := tmpl.Execute(w, nil)
+		err := tmpl.ExecuteTemplate(w, "base.html", map[string]any{
+			"DevMode": true,
+		})
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -5,12 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
+    {{ if .DevMode }}
+    <!-- Load CSS from Vite dev server -->
+    <link rel="stylesheet" href="http://localhost:5173/web/css/main.css">
+    {{ else }}
+    <link rel="stylesheet" href="static/{{ asset "css/main.css" }}">
+    {{ end }}
 </head>
 
 <body>
     {{ template "body" . }}
+
+    {{ if .DevMode }}
+    <!-- Load JS from Vite dev server -->
     <script type="module" src="http://localhost:5173/@vite/client"></script>
-    <script type="module" src="http://localhost:5173/main.js"></script>
+    <script type="module" src="http://localhost:5173/web/js/main.js"></script>
+    {{ else }}
+    <script type="module" src="static/{{ asset "js/main.js" }}"></script>
+    {{ end }}
 </body>
 
 </html>

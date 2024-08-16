@@ -7,18 +7,30 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/ShahramMebashar/portolfio/internal/vite"
 )
 
 type Server struct {
-	views map[string]*template.Template
+	views    map[string]*template.Template
+	manifest map[string]*vite.ManifestEntry
 }
 
 func NewServer() *http.Server {
 	// Start the server
 	fmt.Println("Server started...")
 
-	server := &Server{}
-	err := server.LoadTemplates()
+	manifest, err := vite.LoadViteManifest()
+
+	if err != nil {
+		log.Fatalf("failed to load vite manifest with %s", err)
+	}
+
+	server := &Server{
+		manifest: manifest,
+	}
+
+	err = server.LoadTemplates()
 
 	if err != nil {
 		log.Fatalf("failed to load templates with %s", err)
