@@ -1,4 +1,37 @@
 {{ define "body" }}
-<h1>Welcome to my portfolio</h1>
-<p>My name is John Doe and I am a web developer.</p>
+<header class="py-16 lg:py-40 bg-[#FAF8F6]">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+            <div class="lg:col-span-2">
+                <h1 class="max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-6xl">👋,
+                    I'm
+                    Shahram, <br /> a Full Stack Developer.</h1>
+                <div class="mt-8 text-zinc-700 space-y-3 max-w-4xl text-lg">
+                    <p>With a passion for building efficient, scalable, and user-friendly web applications, I specialize
+                        in
+                        <span class="text-[#4C588F]">PHP</span>,
+                        <span class="text-[#F6352D]">Laravel</span>, <span class="text-[#57B1D5]">Go</span>, and <span
+                            class="text-[#FFCA00]">JavaScript</span>. My journey in software development has equipped me
+                        with a deep
+                        understanding of both frontend and backend technologies, allowing me to create seamless digital
+                        experiences from concept to deployment.
+                    </p>
+                </div>
+                <a href="#contact"
+                    class="inline-block px-6 py-2 mt-8 text-lg font-medium text-white bg-green-600 rounded-full">
+                    Get in Touch
+                </a>
+            </div>
+            <div class="lg:col-span-1">
+                <div class="overflow-hidden rounded-xl bg-green-600 p-1 h-96">
+                    <img src="/static/images/shahram.jpeg" class="object-cover w-full h-full rounded-xl" alt="Shahram">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="h-[1500px]">
+    content
+</div>
 {{ end }}

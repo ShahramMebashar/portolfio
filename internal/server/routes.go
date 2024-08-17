@@ -10,24 +10,17 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	fs := http.FileServer(http.Dir("public"))
 
-	mux.Handle("/static/", http.StripPrefix("/static/", fs))
+	mux.Handle("/static/", gzipHandler(cacheControlHandler(http.StripPrefix("/static/", fs))))
+	mux.Handle("/robots.txt", gzipHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "public/robots.txt")
+	})))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl, ok := s.views["home"]
-
-		if !ok {
-			http.Error(w, "template not found", http.StatusInternalServerError)
-			return
-		}
-
-		err := tmpl.ExecuteTemplate(w, "base.html", map[string]any{
-			"DevMode": true,
-		})
-
+		err := s.Render(w, "home", nil)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
 
-	return mux
+	return s.earlyHintsMiddleware(mux)
 }

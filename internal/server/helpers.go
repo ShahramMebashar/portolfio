@@ -1,8 +1,12 @@
 package server
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func (s *Server) LoadAsset(name string) (string, error) {
+	name = strings.TrimSpace(name)
 	entry, ok := s.manifest[name]
 
 	if !ok {

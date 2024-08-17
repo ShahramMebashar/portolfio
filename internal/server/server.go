@@ -14,20 +14,21 @@ import (
 type Server struct {
 	views    map[string]*template.Template
 	manifest map[string]*vite.ManifestEntry
+	DevMode  bool
 }
 
 func NewServer() *http.Server {
-	// Start the server
-	fmt.Println("Server started...")
-
 	manifest, err := vite.LoadViteManifest()
 
 	if err != nil {
 		log.Fatalf("failed to load vite manifest with %s", err)
 	}
 
+	appMode := os.Getenv("APP_MODE")
+
 	server := &Server{
 		manifest: manifest,
+		DevMode:  appMode != "production",
 	}
 
 	err = server.LoadTemplates()

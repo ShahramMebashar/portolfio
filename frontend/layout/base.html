@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth bg-white">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
+    <meta name="description" content="Shahram's Portfolio">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
     {{ if .DevMode }}
     <!-- Load CSS from Vite dev server -->
     <link rel="stylesheet" href="http://localhost:5173/frontend/css/main.css">
     {{ else }}
     <link rel="stylesheet" href="static/{{ asset "css/main.css" }}">
     {{ end }}
+
 </head>
 
-<body>
+<body class="antialiased font-sans">
+    {{ template "nav" . }}
+
     {{ template "body" . }}
 
     {{ if .DevMode }}
@@ -21,7 +30,7 @@
     <script type="module" src="http://localhost:5173/@vite/client"></script>
     <script type="module" src="http://localhost:5173/frontend/js/main.js"></script>
     {{ else }}
-    <script type="module" src="static/{{ asset "js/main.js" }}"></script>
+    <script type="module" src="static/{{ asset " js/main.js" }}"></script>
     {{ end }}
 </body>
 
