@@ -15,12 +15,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 		http.ServeFile(w, r, "public/robots.txt")
 	})))
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err := s.Render(w, "home", nil)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
+	mux.HandleFunc("/", s.homeHandler)
 
 	return s.earlyHintsMiddleware(mux)
 }
