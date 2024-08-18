@@ -10,8 +10,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	fs := http.FileServer(http.Dir("public"))
 
-	mux.Handle("/static/", gzipHandler(cacheControlHandler(http.StripPrefix("/static/", fs))))
-	mux.Handle("/robots.txt", gzipHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/static/", gzipMiddleware(cacheControlMiddleware(http.StripPrefix("/static/", fs))))
+	mux.Handle("/robots.txt", gzipMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "public/robots.txt")
 	})))
 

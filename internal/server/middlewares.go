@@ -7,39 +7,33 @@ import (
 	"strings"
 )
 
-func gzipHandler(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Check if the client accepts GZIP encoding
-		if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-			w.Header().Set("Content-Encoding", "gzip")
-
-			// Create a pipe to connect the gzip writer and the original writer
-			gzipWriter := gzip.NewWriter(w)
-			defer gzipWriter.Close()
-
-			// Create a response writer that writes to the gzip writer
-			writer := gzipResponseWriter{Writer: gzipWriter, ResponseWriter: w}
-
-			// Serve the request using the wrapped writer
-			h.ServeHTTP(writer, r)
-		} else {
-			// If the client does not accept GZIP, serve normally
-			h.ServeHTTP(w, r)
-		}
-	})
-}
-
-// gzipResponseWriter wraps the original ResponseWriter to write compressed data
 type gzipResponseWriter struct {
 	http.ResponseWriter
 	Writer *gzip.Writer
 }
 
-func (w gzipResponseWriter) Write(b []byte) (int, error) {
-	return w.Writer.Write(b)
+func (g *gzipResponseWriter) Write(p []byte) (int, error) {
+	return g.Writer.Write(p)
 }
 
-func cacheControlHandler(h http.Handler) http.Handler {
+func gzipMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+			w.Header().Add("Content-Encoding", "gzip")
+
+			gzipWriter := gzip.NewWriter(w)
+			defer gzipWriter.Close()
+
+			gzipResponseWriter := &gzipResponseWriter{ResponseWriter: w, Writer: gzipWriter}
+
+			next.ServeHTTP(gzipResponseWriter, r)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func cacheControlMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Set cache control headers for static assets
 		w.Header().Set("Cache-Control", "public, max-age=31536000") // Cache for 1 year

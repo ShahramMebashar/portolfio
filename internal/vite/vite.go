@@ -30,7 +30,7 @@ func LoadViteManifest() (map[string]*ManifestEntry, error) {
 	var mapEntries = make(map[string]*ManifestEntry)
 
 	for key, entry := range entries {
-		regexp := regexp.MustCompile(`\.[a-zA-Z0-9]+\.`)
+		regexp := regexp.MustCompile(`\.[a-zA-Z0-9\-\#]+\.`)
 		newKey := regexp.ReplaceAllString(key, ".")
 		mapEntries[newKey] = entry
 	}
